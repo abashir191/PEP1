@@ -37,4 +37,32 @@ create table Genre (
     genre_name varchar(255)
 );
 
-insert into User (username, password, role) values ('testuser1', 'password', 'admin');
+-- User accounts
+insert into User (username, password, role) values ('admin1', 'password1', 'admin');
+insert into User (username, password, role) values ('normyUser', 'password2', 'normy');
+
+--UserShow
+insert into UserShow (user_id, show_id, status) values ('1', '1', 'Not Started');
+insert into UserShow (user_id, show_id, status) values ('2', '2', 'Watching');
+insert into UserShow (user_id, show_id, status) values ('3', '3', 'Finished');
+
+--TV Show
+insert into TVShow (show_name, rating) values ('House of Dragon', '4.1');
+insert into TVShow (show_name, rating) values ('Sword Art Online', '5.0');
+insert into TVShow (show_name, rating) values ('Game of Thrones', '4.5');
+
+--Show Genre
+insert into ShowGenre (show_id, genre_id) values ('1', '1');
+insert into ShowGenre (show_id, genre_id) values ('2', '2');
+insert into ShowGenre (show_id, genre_id) values ('3', '3');
+
+--Genre
+insert into Genre (genre_name) values ('Fantasy');
+insert into Genre (genre_name) values ('Adventure');
+insert into Genre (genre_name) values ('Romance');
+insert into Genre (genre_name) values ('Comedy');
+insert into Genre (genre_name) values ('Horror');
+insert into Genre (genre_name) values ('Science Fiction');
+
+
+
