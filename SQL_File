@@ -1,5 +1,9 @@
-drop table if exists message;
-drop table if exists account;
+drop table if exists User;
+drop table if exists UserShow;
+drop table if exists TVShow;
+drop table if exists ShowGenre;
+drop table if exists Genre;
+
 create table User (
     user_id int primary key auto_increment,
     username varchar(255) unique,
@@ -33,8 +37,4 @@ create table Genre (
     genre_name varchar(255)
 );
 
-
-
-insert into account (username, password) values ('testuser1', 'password');
-
---insert into message (posted_by, message_text, time_posted_epoch) values (1,'test message 1',1669947792);
+insert into User (username, password, role) values ('testuser1', 'password', 'admin');
