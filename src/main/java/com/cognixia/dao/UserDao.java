@@ -3,33 +3,16 @@ package com.cognixia.dao;
 import java.util.List;
 
 public interface UserDao {
-	
-    // User operations
-    User getUserById(int userId);
-    List<User> getAllUsers();
-    User addUser(User user);
-    User updateUser(User user);
-    boolean deleteUser(int userId);
-
-    // TVShow operations
+    // TVShow Operations
     TVShow getTVShowById(int showId);
-    List<TVShow> getAllTVShows();
-    TVShow addTVShow(TVShow tvShow);
-    TVShow updateTVShow(TVShow tvShow);
-    boolean deleteTVShow(int showId);
-    
-    
-    // ShowGenre operations
-    ShowGenre getShowGenreById(int showGenreId);
-    List<ShowGenre> getAllShowGenres();
-    ShowGenre addShowGenre(ShowGenre showGenre);
-    ShowGenre updateShowGenre(ShowGenre showGenre);
-    boolean deleteShowGenre(int showGenreId);
+    String getTVShowNameById(int showId);
+    double getTVShowRatingById(int showId);
 
-    // Genre operations
-    Genre getGenreById(int genreId);
-    List<Genre> getAllGenres();
-    Genre addGenre(Genre genre);
-    Genre updateGenre(Genre genre);
-    boolean deleteGenre(int genreId);
+    // User Operations
+    User getUserById(int userId);
+
+    // UserShow Operations
+    UserShow getUserShowById(int userShowId);
+    List<UserShow> getUserShowsByUserId(int userId);
+    boolean updateUserShow(UserShow userShow);
 }
