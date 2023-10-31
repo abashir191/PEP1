@@ -1,3 +1,7 @@
+drop database if exists show_db;
+create database show_db;
+use show_db;
+
 drop table if exists User;
 drop table if exists UserShow;
 drop table if exists TVShow;
