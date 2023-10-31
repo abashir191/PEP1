@@ -1,0 +1,72 @@
+drop database if exists show_db;
+create database show_db;
+use show_db;
+
+drop table if exists User;
+drop table if exists UserShow;
+drop table if exists TVShow;
+drop table if exists ShowGenre;
+drop table if exists Genre;
+
+create table User (
+    user_id int primary key auto_increment,
+    username varchar(255) unique,
+    password varchar(255),
+    role varchar(255)
+);
+
+create table TVShow (
+    show_id int primary key auto_increment,
+    show_name varchar(255),
+    rating double
+);
+
+create table Genre (
+    genre_id int primary key auto_increment,
+    genre_name varchar(255)
+);
+
+create table UserShow (
+    usershow_id int primary key auto_increment,
+    user_id int,
+    show_id int,
+    status varchar(255),
+    foreign key (usershow_id) references User(user_id),
+    foreign key (show_id) references TVShow(show_id)
+);
+
+create table ShowGenre (
+    showGenre_id int primary key auto_increment,
+    show_id int,
+    genre_id int,
+    foreign key (show_id) references TVShow(show_id),
+    foreign key (genre_id) references Genre(genre_id)
+);
+
+-- User accounts
+insert into User (username, password, role) values ('admin1', 'password1', 'admin');
+insert into User (username, password, role) values ('middleUser', 'password2', 'middle');
+insert into User (username, password, role) values ('normyUser', 'password3', 'normy');
+
+-- TV Show
+insert into TVShow (show_name, rating) values ('House of Dragon', '4.1');
+insert into TVShow (show_name, rating) values ('Sword Art Online', '5.0');
+insert into TVShow (show_name, rating) values ('Game of Thrones', '4.5');
+
+-- Genre
+insert into Genre (genre_name) values ('Fantasy');
+insert into Genre (genre_name) values ('Adventure');
+insert into Genre (genre_name) values ('Romance');
+insert into Genre (genre_name) values ('Comedy');
+insert into Genre (genre_name) values ('Horror');
+insert into Genre (genre_name) values ('Science Fiction');
+
+-- UserShow
+insert into UserShow (user_id, show_id, status) values ('1', '1', 'Not Started');
+insert into UserShow (user_id, show_id, status) values ('2', '2', 'Watching');
+insert into UserShow (user_id, show_id, status) values ('3', '3', 'Finished');
+
+-- Show Genre
+insert into ShowGenre (show_id, genre_id) values ('1', '1');
+insert into ShowGenre (show_id, genre_id) values ('2', '2');
+insert into ShowGenre (show_id, genre_id) values ('3', '3');
