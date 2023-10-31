@@ -39,7 +39,8 @@ create table Genre (
 
 -- User accounts
 insert into User (username, password, role) values ('admin1', 'password1', 'admin');
-insert into User (username, password, role) values ('normyUser', 'password2', 'normy');
+insert into User (username, password, role) values ('middleUser', 'password2', 'middle');
+insert into User (username, password, role) values ('normyUser', 'password3', 'normy');
 
 --UserShow
 insert into UserShow (user_id, show_id, status) values ('1', '1', 'Not Started');
