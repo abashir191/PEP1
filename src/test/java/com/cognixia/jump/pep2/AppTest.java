@@ -1,4 +1,4 @@
-package $package;
+package com.cognixia.jump.pep2;
 
 import static org.junit.Assert.assertTrue;
 

@@ -1,4 +1,4 @@
-package $package;
+package com.cognixia.jump.pep2;
 
 /**
  * Hello world!
