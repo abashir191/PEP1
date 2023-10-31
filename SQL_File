@@ -1,0 +1,40 @@
+drop table if exists message;
+drop table if exists account;
+create table User (
+    user_id int primary key auto_increment,
+    username varchar(255) unique,
+    password varchar(255)
+    role varchar(255)
+);
+create table UserShow (
+    usershow_id int primary key auto_increment,
+    user_id int,
+    show_id int,
+    status varchar(255),
+    foreign key (usershow_id) references User(user_id)
+    foreign key (show_id) references TVShow(show_id)
+);
+create table TVShow (
+    show_id int primary key auto_increment,
+    show_name varchar(255),
+    rating double
+);
+
+create table ShowGenre (
+    showGenre_id int primary key auto_increment,
+    show_id int,
+    genre_id int
+    foreign key (show_id) references TVShow(show_id)
+    foreign key (genre_id) references Genre(genre_id)
+);
+
+create table Genre (
+    genre_id int primary key auto_increment,
+    genre_name varchar(255)
+);
+
+
+
+insert into account (username, password) values ('testuser1', 'password');
+
+--insert into message (posted_by, message_text, time_posted_epoch) values (1,'test message 1',1669947792);
