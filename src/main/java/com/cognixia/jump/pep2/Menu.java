@@ -82,6 +82,8 @@ public class Menu {
 		// status = 'Finished'	
 		case 3:
 			
+		default:
+			
 		}
 		
 	}
@@ -147,7 +149,7 @@ public class Menu {
 	public boolean loginMenu() {
 		System.out.println("Welcome! Please select an option from below: \n"
 				+ "1. Existing user log in\n"
-				+ "2. Create new account"
+				+ "2. Create new account\n"
 				+ "3. Quit");
 		int input = sc.nextInt();
 		sc.nextLine();
@@ -179,6 +181,8 @@ public class Menu {
 		
 		case 3:
 			quitProgram = true;
+		default:
+			System.out.println("Invalid input, please try again.");
 		}
 		return false;
 	}
