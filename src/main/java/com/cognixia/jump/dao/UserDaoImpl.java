@@ -130,7 +130,7 @@ public class UserDaoImpl implements UserDao {
 			int count = ps.executeUpdate();
 
 			if (count > 0) {
-				return chef;
+				return user;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
