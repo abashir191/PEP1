@@ -40,7 +40,7 @@ public class UserDaoImpl implements UserDao {
 				rs.close();
 				return true; // Return true if the user can log in
 			} else {
-				resultSet.close();
+				rs.close();
 				return false; // Return false if the user cannot log in
 			}
 
@@ -54,13 +54,13 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public Optional<User> getUserById(int userId) {
 		try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM User WHERE user_id = ?")) {
-			pstmt.setInt(1, userId);
+			ps.setInt(1, userId);
 
 			ResultSet rs = ps.executeQuery();
 
 			// Check if user with the specified ID was found
 			if (rs.next()) {
-				int userId = rs.getInt("user_id");
+				int userid = rs.getInt("user_id");
 				String username = rs.getString("username");
 				String password = rs.getString("password");
 				String role = rs.getString("role");
@@ -68,7 +68,7 @@ public class UserDaoImpl implements UserDao {
 				rs.close();
 
 				// Create a new User object and put it in Optional
-				User user = new User(userId, username, password, role);
+				User user = new User(userid, username, password, role);
 				Optional<User> userFound = Optional.of(user);
 				return userFound;
 
@@ -102,7 +102,7 @@ public class UserDaoImpl implements UserDao {
 						rs.getInt("user_id"), // update columns in table
 						rs.getString("username"),
 						rs.getString("password"),
-						rs.getInt("role")
+						rs.getString("role")
 				);
 				users.addUser(user);
 			}
@@ -124,7 +124,7 @@ public class UserDaoImpl implements UserDao {
 			// Create a PreparedStatement
 			PreparedStatement ps = connection.prepareStatement("INSERT INTO User (username, password, role) VALUES (?, ?, ?)");
 			ps.setString(1, user.getUsername());
-			ps.setString(2, user.getPassword);
+			ps.setString(2, user.getPassword());
 			ps.setString(3, "normal");
 
 			int count = ps.executeUpdate();

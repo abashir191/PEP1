@@ -13,7 +13,7 @@ public interface UserDao {
 	boolean logIn(User user);
 	
     // User operations
-    User getUserById(int userId);
+    Optional<User> getUserById(int userId);
     List<User> getAllUsers();
     User addUser(User user);
 
