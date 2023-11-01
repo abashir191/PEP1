@@ -2,6 +2,11 @@ package com.cognixia.dao;
 
 import java.util.List;
 
+import com.cognixia.jump.dao.Genre;
+import com.cognixia.jump.dao.ShowGenre;
+import com.cognixia.jump.dao.TVShow;
+import com.cognixia.jump.dao.User;
+
 public interface UserDao {
 	
     // User operations
