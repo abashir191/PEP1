@@ -29,8 +29,25 @@ public class UserDaoImpl implements UserDao {
 	}
 	@Override
 	public boolean logIn(User user) {
-		// TODO Auto-generated method stub
-		return false;
+		try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM User WHERE username = ? AND password = ?")) {
+			ps.setString(1, user.getUsername());
+			ps.setString(2, user.getPassword());
+
+			ResultSet rs = ps.executeQuery();
+
+			// Check if the user with the provided username and password exists
+			if (rs.next()) {
+				rs.close();
+				return true; // Return true if the user can log in
+			} else {
+				resultSet.close();
+				return false; // Return false if the user cannot log in
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false; // Return false if an SQL exception occurs during the login attempt
+		}
 	}
 
 //Methods:
