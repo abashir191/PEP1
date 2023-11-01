@@ -1,15 +1,11 @@
 package com.cognixia.jump.dao;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import com.cognixia.jump.connection.ConnectionManager;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.PreparedStatement;
 import java.util.Optional;
-
-import com.cognixia.jump.connection.ConnectionManager;
 
 public class UserDaoImpl implements UserDao {
 
@@ -60,7 +56,8 @@ public class UserDaoImpl implements UserDao {
 
 			// Check if user with the specified ID was found
 			if (rs.next()) {
-				int user_id = rs.getInt("user_id");
+
+				int user_Id = rs.getInt("user_id");
 				String username = rs.getString("username");
 				String password = rs.getString("password");
 				String role = rs.getString("role");
@@ -68,7 +65,7 @@ public class UserDaoImpl implements UserDao {
 				rs.close();
 
 				// Create a new User object and put it in Optional
-				User user = new User(user_id, username, password, role);
+				User user = new User(user_Id, username, password, role);
 				Optional<User> userFound = Optional.of(user);
 				return userFound;
 

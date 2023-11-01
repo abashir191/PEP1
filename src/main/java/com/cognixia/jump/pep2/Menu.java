@@ -1,11 +1,16 @@
 package com.cognixia.jump.pep2;
 
+import com.cognixia.jump.dao.User;
+import com.cognixia.jump.dao.UserDao;
+import com.cognixia.jump.dao.UserDaoImpl;
+
 import java.util.Scanner;
+
 
 public class Menu {
 	Scanner sc = new Scanner(System.in);
+	UserDao udi = new UserDaoImpl();
 	boolean quitProgram = false;
-
 	public void mainMenu() {
 		while(!quitProgram) {
 			boolean loggedIn = false;
@@ -13,10 +18,10 @@ public class Menu {
 			while(!loggedIn && !quitProgram) {
 				//returns true or false based on whether operation was successful
 				loggedIn = loginMenu();
-				
+
 				//query for user info, do an if statement if user data does not exist to make them repeat
 			}
-			
+
 			while(loggedIn && !quitProgram) {
 				System.out.println("What would you like to do? Please select an option below:\n"
 						+ "1. Add a new TV show entry\n"
@@ -27,9 +32,9 @@ public class Menu {
 						+ "6. Log out");
 				int input = sc.nextInt();
 				sc.nextLine();
-				
+
 				switch(input) {
-				
+
 				//add a new TV show entry
 				case 1:
 					createTVShow();
@@ -39,89 +44,89 @@ public class Menu {
 				//delete an existing TV show entry
 				case 3:
 					deleteTVShow();
-					
+
 				//Rate a TV show
 				case 4:
 					rateTVShow();
 				//View TV catalog
 				case 5:
 					viewTVCatalog();
-					
+
 				//log out
 				case 6:
 					loggedIn = false;
-				
+
 				default:
 					System.out.println("Invalid input - please select a valid option.");
 				}
 			}
 		}
 	}
-	
+
 	public void createTVShow() {
 		System.out.println("Please enter the name of the TV show you would like to add: ");
 		String showInput = sc.nextLine();
 		//logic for finding if the show exists here, exit if it does not exist
-		
-		
+
+
 		System.out.println("What is your current watch status of this show?\n"
 				+ "1. Not watched\n"
 				+ "2. Currently watching\n"
 				+ "3. Finished");
 		int input = sc.nextInt();
 		sc.nextLine();
-		
+
 		switch(input) {
-		
+
 		// status = 'Not Started'
-		case 1: 
-		
+		case 1:
+
 		// status = 'Watching'
 		case 2:
-		
-		// status = 'Finished'	
+
+		// status = 'Finished'
 		case 3:
-			
+
 		default:
-			
+
 		}
-		
+
 	}
-	
+
 	public void modifyTVShow() {
 		System.out.println("Please enter the name of the TV show whose status you would like to modify: ");
 		String showInput = sc.nextLine();
 		//logic for finding if the show exists here, exit if it does not exist
-		
-		
+
+
 		System.out.println("What is your current watch status of this show?\n"
 				+ "1. Not watched\n"
 				+ "2. Currently watching\n"
 				+ "3. Finished");
 		int input = sc.nextInt();
 		sc.nextLine();
-		
+
 		switch(input) {
-		
+
 		// status = 'Not Started'
-		case 1: 
-		
+		case 1:
+
 		// status = 'Watching'
 		case 2:
-		
-		// status = 'Finished'	
+
+		// status = 'Finished'
 		case 3:
-			
+
 		}
 	}
-	
+
 	public void deleteTVShow() {
 		System.out.println("Please enter the name of the TV show you wish to delete: ");
 		String input = sc.nextLine();
-		
+
 		//delete the entry for input if it exists
 	}
-	
+
 	public void rateTVShow() {
 		System.out.println("Please enter the name of the TV show you wish to rate: ");
 		String show = sc.nextLine();
@@ -136,16 +141,16 @@ public class Menu {
 				sc.nextLine();
 			}
 			//do logic for adding rating to show here
-			
+
 		} else {
 			System.out.println("This TV show is not in the catalog. Sending you back to the menu...");
 		}
 	}
-	
+
 	public void viewTVCatalog() {
-		
+
 	}
-	
+
 	public boolean loginMenu() {
 		System.out.println("Welcome! Please select an option from below: \n"
 				+ "1. Existing user log in\n"
@@ -153,32 +158,40 @@ public class Menu {
 				+ "3. Quit");
 		int input = sc.nextInt();
 		sc.nextLine();
-		
+
 		switch(input) {
-		
+
 		//existing user log in
 		case 1:
 			System.out.println("Please enter your username: ");
 			String username = sc.nextLine();
 			System.out.println("Please enter your password: ");
 			String password = sc.nextLine();
-			
+
 			//check to see if username and password exist, return true if so
-			/*if() {
+			User usr = new User(username, password, "normal");
+			System.out.println(usr);
+
+			if (udi.logIn(usr)) {
+				System.out.println("YAY ITS TRUE");
 				return true;
-			} else {
+			}
+			else {
+				System.out.println("NOOOOO. BAD");
 				return false;
-			}*/
-		//create new account	
+			}
+
+
+		//create new account
 		case 2:
 			System.out.println("Please enter your username: ");
 			username = sc.nextLine();
 			System.out.println("Please enter your password: ");
 			password = sc.nextLine();
-			
+
 			//query to add username and password to table here
-			return true;
-		
+			return false;
+
 		case 3:
 			quitProgram = true;
 		default:
@@ -187,3 +200,4 @@ public class Menu {
 		return false;
 	}
 }
+
