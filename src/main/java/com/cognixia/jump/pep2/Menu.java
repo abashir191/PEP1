@@ -12,9 +12,6 @@ public class Menu {
 //	UserDaoImpl udi = new UserDaoImpl();
 	UserDaoImpl udi;
 
-
-
-
 	public void mainMenu() {
 
 
