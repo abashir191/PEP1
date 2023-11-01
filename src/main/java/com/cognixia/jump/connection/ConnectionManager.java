@@ -16,7 +16,8 @@ public class ConnectionManager {
 	// ?serverTimezone=EST5EDT <-- add to end of URL if trouble connecting and on Mac/Linux
 	private static final String URL = "jdbc:mysql://localhost:3306/show_db";
 	private static final String USERNAME = "root";
-	private static final String PASSWORD = "root"; // change password if needed, Mac/Linux = Root@123  |  Windows = root
+//	private static final String PASSWORD = "root"; // change password if needed, Mac/Linux = Root@123  |  Windows = root
+	private static final String PASSWORD = "Root@123"; // change password if needed, Mac/Linux = Root@123  |  Windows = root
 	
 	private static Connection connection = null;
 	

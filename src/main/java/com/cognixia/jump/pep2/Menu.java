@@ -1,13 +1,15 @@
 package com.cognixia.jump.pep2;
 
 import com.cognixia.jump.dao.User;
+import com.cognixia.jump.dao.UserDao;
 import com.cognixia.jump.dao.UserDaoImpl;
 
 import java.util.Scanner;
 
+
 public class Menu {
 	Scanner sc = new Scanner(System.in);
-	UserDaoImpl udi;
+	UserDao udi = new UserDaoImpl();
 	boolean quitProgram = false;
 	public void mainMenu() {
 		while(!quitProgram) {
@@ -168,7 +170,18 @@ public class Menu {
 
 			//check to see if username and password exist, return true if so
 			User usr = new User(username, password, "normal");
-			udi.logIn(usr);
+			System.out.println(usr);
+
+			if (udi.logIn(usr)) {
+				System.out.println("YAY ITS TRUE");
+				return true;
+			}
+			else {
+				System.out.println("NOOOOO. BAD");
+				return false;
+			}
+
+
 		//create new account
 		case 2:
 			System.out.println("Please enter your username: ");
@@ -177,7 +190,7 @@ public class Menu {
 			password = sc.nextLine();
 
 			//query to add username and password to table here
-			return true;
+			return false;
 
 		case 3:
 			quitProgram = true;
@@ -187,3 +200,4 @@ public class Menu {
 		return false;
 	}
 }
+
