@@ -43,6 +43,9 @@ public class UserDaoImpl implements UserDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false; // Return false if an SQL exception occurs during the login attempt
+		} catch (NullPointerException e) {
+			System.out.println("still nullpointer");
+			return false;			
 		}
 	}
 
@@ -115,7 +118,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public User addUser(User user) {
+	public boolean addUser(User user) {
 		try {
 
 			// Create a PreparedStatement
@@ -127,13 +130,13 @@ public class UserDaoImpl implements UserDao {
 			int count = ps.executeUpdate();
 
 			if (count > 0) {
-				return user;
+				return true;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return null;
+		return false;
 	}
 
 	@Override
@@ -279,6 +282,35 @@ public class UserDaoImpl implements UserDao {
 		}
 		
 		return false;
+	}
+	
+	@Override
+	public List<TVShow> getShowByName(String name) throws NullPointerException {
+		
+		List<TVShow> showByName = new ArrayList<>();
+		
+		try ( PreparedStatement pstmt = connection.prepareStatement("select * from TVShow where show_name = ?")) {
+			
+			pstmt.setString(1, name);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				
+				int show_id = rs.getInt("show_id");
+				String show_name = rs.getString("show_name");
+				double rating = rs.getDouble("rating");
+				
+				TVShow foundShow = new TVShow(show_id, show_name, rating);
+				showByName.add(foundShow);
+				
+			}
+			
+		} catch (SQLException e) {
+
+		}
+		
+		return showByName;
+		
 	}
 	
 }
