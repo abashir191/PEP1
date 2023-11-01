@@ -2,6 +2,7 @@ package com.cognixia.jump.dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDao {
 	
@@ -25,7 +26,7 @@ public interface UserDao {
     // TVShow searchTVShow(String string);
     
     // UserShow operations
-    List<UserShow> getAllUserShows(int id);
-    UserShow updateUserShow(UserShow userShow);
+    Optional<List<UserShow>> getAllUserShows(int id);
+    boolean updateUserShow(UserShow userShow);
     
 }
