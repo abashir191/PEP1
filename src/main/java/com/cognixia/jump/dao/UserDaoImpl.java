@@ -212,6 +212,7 @@ public class UserDaoImpl implements UserDao {
 		}
 		return null;
 	}
+	//bla bla
 	@Override
 	public boolean deleteTVShow(int showId) {
 		String query = "DELETE FROM TVShow WHERE show_id = ?";
@@ -222,6 +223,7 @@ public class UserDaoImpl implements UserDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
+
 		}
 	}
 
