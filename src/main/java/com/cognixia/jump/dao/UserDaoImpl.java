@@ -83,15 +83,60 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	public List<UserShow> getAllUserShows(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public Optional<List<UserShow>> getAllUserShows(int id) {
+		
+		Optional<List<UserShow>> userShowOpt = Optional.empty();
+		List<UserShow> userShowList = new ArrayList<>();
+		
+		try ( PreparedStatement pstmt = connection.prepareStatement("select * from UserShow where user_id = ?") ) {
+			
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while (rs.next()) {
+				
+				int usershow_id = rs.getInt("usershow_id");
+				int user_id = rs.getInt("user_id");
+				int show_id = rs.getInt("show_id");
+				String status = rs.getString("status");
+				
+				UserShow foundShow = new UserShow(usershow_id, user_id, show_id, status);
+				
+				userShowList.add(foundShow);
+			}
+			
+		} catch (SQLException e) {
+
+			
+		}
+		
+		userShowOpt = Optional.of(userShowList);
+		
+		return userShowOpt;
 	}
 
 	@Override
-	public UserShow updateUserShow(UserShow userShow) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean updateUserShow(UserShow userShow) {
+		
+		try( PreparedStatement pstmt = connection.prepareStatement("insert into UserShow(user_id, show_id, status) values(?, ?, ?) where user_id = ?") ) {
+			
+			pstmt.setInt(1, userShow.getUser_id());
+			pstmt.setInt(2, userShow.getShow_id());
+			pstmt.setString(3, userShow.getStatus());
+			pstmt.setInt(4, userShow.getUsershow_id());
+			
+			int count = pstmt.executeUpdate();
+			
+			if(count > 0) {
+				return true;
+			}
+			
+			
+		} catch (SQLException e) {
+			
+		}
+		
+		return false;
 	}
 	
 }

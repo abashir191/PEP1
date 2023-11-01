@@ -5,9 +5,9 @@ public class UserShow {
 	private int usershow_id;
 	private int user_id;
 	private int show_id;
-	private StatusEnum status;
+	private String status;
 	
-	public UserShow (int usershow_id, int user_id, int show_id, StatusEnum status) {
+	public UserShow (int usershow_id, int user_id, int show_id, String status) {
 		
 		super();
 		this.usershow_id = usershow_id;
@@ -41,11 +41,11 @@ public class UserShow {
 		this.show_id = show_id;
 	}
 
-	public StatusEnum getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(StatusEnum status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	
