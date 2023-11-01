@@ -141,32 +141,88 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public TVShow getTVShowById(int showId) {
-		// TODO Auto-generated method stub
+		String query = "SELECT * FROM TVShow WHERE show_id = ?";
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setInt(1, showId);
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				if (resultSet.next()) {
+					int show_id = resultSet.getInt("show_id");
+					String show_name = resultSet.getString("show_name");
+					double rating = resultSet.getDouble("rating");
+					return new TVShow(show_id, show_name, rating);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
-
 	@Override
 	public List<TVShow> getAllTVShows() {
-		// TODO Auto-generated method stub
-		return null;
+		List<TVShow> tvShows = new ArrayList<>();
+		String query = "SELECT * FROM TVShow";
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+			 ResultSet resultSet = preparedStatement.executeQuery()) {
+			while (resultSet.next()) {
+				int show_id = resultSet.getInt("show_id");
+				String show_name = resultSet.getString("show_name");
+				double rating = resultSet.getDouble("rating");
+				TVShow tvShow = new TVShow(show_id, show_name, rating);
+				tvShows.add(tvShow);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tvShows;
 	}
-
 	@Override
 	public TVShow addTVShow(TVShow tvShow) {
-		// TODO Auto-generated method stub
+		String query = "INSERT INTO TVShow (show_name, rating) VALUES (?, ?)";
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+			preparedStatement.setString(1, tvShow.getShow_name());
+			preparedStatement.setDouble(2, tvShow.getRating());
+			int affectedRows = preparedStatement.executeUpdate();
+			if (affectedRows == 1) {
+				try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						int show_id = generatedKeys.getInt(1);
+						tvShow.setShow_id(show_id);
+						return tvShow;
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
-
 	@Override
 	public TVShow updateTVShow(TVShow tvShow) {
-		// TODO Auto-generated method stub
+		String query = "UPDATE TVShow SET show_name = ?, rating = ? WHERE show_id = ?";
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setString(1, tvShow.getShow_name());
+			preparedStatement.setDouble(2, tvShow.getRating());
+			preparedStatement.setInt(3, tvShow.getShow_id());
+			int affectedRows = preparedStatement.executeUpdate();
+			if (affectedRows == 1) {
+				return tvShow;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
-
 	@Override
 	public boolean deleteTVShow(int showId) {
-		// TODO Auto-generated method stub
-		return false;
+		String query = "DELETE FROM TVShow WHERE show_id = ?";
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setInt(1, showId);
+			int affectedRows = preparedStatement.executeUpdate();
+			return affectedRows == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Override
