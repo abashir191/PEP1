@@ -1,12 +1,23 @@
 package com.cognixia.jump.pep2;
 
+import com.cognixia.jump.dao.User;
+import com.cognixia.jump.dao.UserDaoImpl;
+
 import java.util.Scanner;
 
 public class Menu {
 	Scanner sc = new Scanner(System.in);
 	boolean quitProgram = false;
 
+//	UserDaoImpl udi = new UserDaoImpl();
+	UserDaoImpl udi;
+
+
+
+
 	public void mainMenu() {
+
+
 		while(!quitProgram) {
 			boolean loggedIn = false;
 			//do login menu logic here  - query for true or false to log in
@@ -63,7 +74,7 @@ public class Menu {
 		String showInput = sc.nextLine();
 		//logic for finding if the show exists here, exit if it does not exist
 		
-		
+
 		System.out.println("What is your current watch status of this show?\n"
 				+ "1. Not watched\n"
 				+ "2. Currently watching\n"
@@ -143,7 +154,7 @@ public class Menu {
 	}
 	
 	public void viewTVCatalog() {
-		
+
 	}
 	
 	public boolean loginMenu() {
@@ -162,13 +173,15 @@ public class Menu {
 			String username = sc.nextLine();
 			System.out.println("Please enter your password: ");
 			String password = sc.nextLine();
-			
-			//check to see if username and password exist, return true if so
-			/*if() {
-				return true;
-			} else {
-				return false;
-			}*/
+
+			User usr = new User (username, password, "normal");
+			if (udi.logIn(usr)) {
+				System.out.println("Hi Dis true");
+			}
+			else
+				System.out.println("NOOOO");
+
+
 		//create new account	
 		case 2:
 			System.out.println("Please enter your username: ");
