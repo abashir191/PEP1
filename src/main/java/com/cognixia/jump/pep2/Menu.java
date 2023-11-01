@@ -1,11 +1,12 @@
 package com.cognixia.jump.pep2;
 
 import java.util.Scanner;
+import com.cognixia.jump.connection.*;
+import com.cognixia.jump.dao.*;
 
 public class Menu {
 	Scanner sc = new Scanner(System.in);
 	boolean quitProgram = false;
-
 	public void mainMenu() {
 		while(!quitProgram) {
 			boolean loggedIn = false;
@@ -164,11 +165,8 @@ public class Menu {
 			String password = sc.nextLine();
 			
 			//check to see if username and password exist, return true if so
-			/*if() {
-				return true;
-			} else {
-				return false;
-			}*/
+			User usr = new User(username, password, "normal");
+			logIn(usr);
 		//create new account	
 		case 2:
 			System.out.println("Please enter your username: ");
