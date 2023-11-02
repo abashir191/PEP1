@@ -293,20 +293,20 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 	@Override
-	public List<UserShow> getShowByName(String name) throws NullPointerException {
+	public List<UserShow> getShowByName(int id) throws NullPointerException {
 		
 		List<UserShow> showByName = new ArrayList<>();
 		
 		try ( PreparedStatement pstmt = connection.prepareStatement("select * from UserShow where show_id = ?")) {
 			
-			pstmt.setString(1, name);
+			pstmt.setInt(1, id);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
 				
 				int show_id = rs.getInt("usershow_id");
-				int uid = rs.getInt("user");
-				int sid = rs.getInt("show");
+				int uid = rs.getInt("user_id");
+				int sid = rs.getInt("show_id");
 				String status = rs.getString("status");
 				double rating = rs.getDouble("indiv_rating");
 				int ep_watched = rs.getInt("ep_watched");

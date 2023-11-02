@@ -23,7 +23,7 @@ public interface UserDao {
     TVShow addTVShow(TVShow tvShow);
     TVShow updateTVShow(TVShow tvShow);
     boolean deleteTVShow(int showId);
-    List<UserShow> getShowByName(String name);
+    List<UserShow> getShowByName(int id);
     
     // TVShow searchTVShow(String string);
     

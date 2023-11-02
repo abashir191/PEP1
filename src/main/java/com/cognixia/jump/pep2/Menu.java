@@ -184,15 +184,15 @@ public class Menu {
 
 	public void rateTVShow() {
 		
-		System.out.println("Please enter the name of the TV show you wish to see the average rating for: ");
-		String show = sc.nextLine();
+		System.out.println("Please enter the ID of the TV show you wish to see the average rating for: ");
+		int show = sc.nextInt();
 		List<UserShow> showByName = udi.getShowByName(show);
 		
 		int counter = 0;
 		double total = 0;
-		
+
 		for (UserShow eachShow: showByName) {
-			
+
 			counter++;
 			total += eachShow.getIndiv_rating();
 			
@@ -201,6 +201,7 @@ public class Menu {
 		double d = total / counter;
 		System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 		System.out.println("The average rating for the show " + show + " is " + d + " .");
+		System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 		
 //		System.out.println("Please enter the name of the TV show you wish to rate: ");
 //		String show = sc.nextLine();
