@@ -51,8 +51,9 @@ public class Menu {
 						+ "6. Delete from your shows\n"
 						+ "7. Update from your shows\n"
 						+ "8. Get average rating for a TV show\n"
-						+ "9. View TV catalog\n"
-						+ "10. Log out" + ANSI_RESET);
+						+ "9. Show other's status for a TV show\n"
+						+ "10. View TV catalog\n"
+						+ "11. Log out" + ANSI_RESET);
 				int input = sc.nextInt();
 				sc.nextLine();
 
@@ -87,12 +88,15 @@ public class Menu {
 				case 8:
 					rateTVShow();
 					continue;
-				//View TV catalog
 				case 9:
+					showStatusForShow();
+					continue;
+				//View TV catalog
+				case 10:
 					viewTVCatalog();
 					continue;
 				//log out
-				case 10:
+				case 11:
 					System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 					System.out.println("Log out successful.");
 					loggedIn = false;
@@ -200,7 +204,7 @@ public class Menu {
 		
 		double d = total / counter;
 		System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-		System.out.println("The average rating for the show " + show + " is " + d + " .");
+		System.out.println("The average rating for the show " + show + " is " + d + ".");
 		System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 		
 //		System.out.println("Please enter the name of the TV show you wish to rate: ");
@@ -363,6 +367,20 @@ public class Menu {
 			} else {
 				System.out.println("Show in the watch list NOT successfully updated.");
 			}
+		}
+		System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
+	}
+	
+	public void showStatusForShow() {
+		System.out.println("Please enter the ID of the show you want to see other's progress for: ");
+		int showid = sc.nextInt();
+		
+		Optional<List<UserShow>> otherStatus = udi.getShowStatus(showid);
+		List<UserShow> fetchedData = otherStatus.get();
+		System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
+		System.out.println("Other people's status with the show: \n");
+		for(UserShow us: fetchedData) {
+			System.out.println(us);
 		}
 		System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 	}

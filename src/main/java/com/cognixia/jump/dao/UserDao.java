@@ -33,5 +33,6 @@ public interface UserDao {
     boolean addUserShow(UserShow userShow);
     boolean deleteUserShow(int usid, int usrid);
     Optional<UserShow> getUserShowByID(int usid, int usrid);
+    Optional<List<UserShow>> getShowStatus(int id);
     
 }

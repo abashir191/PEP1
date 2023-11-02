@@ -407,4 +407,38 @@ public class UserDaoImpl implements UserDao {
 		return userShowOpt;
 	}
 	
+	@Override
+	public
+	Optional<List<UserShow>> getShowStatus(int id) {
+		
+		Optional<List<UserShow>> allStatus = Optional.empty();
+		List<UserShow> allStatusList = new ArrayList<>();
+		
+		try (PreparedStatement preparedStatement = connection.prepareStatement("select * from UserShow where show_id = ?")) {
+			preparedStatement.setInt(1, id);
+			ResultSet rs = preparedStatement.executeQuery();
+			
+			while (rs.next()) {
+				
+				int usershow_id = rs.getInt("usershow_id");
+				int user_id = rs.getInt("user_id");
+				int show_id = rs.getInt("show_id");
+				String status = rs.getString("status");
+				double indiv_rating = rs.getDouble("indiv_rating");
+				int ep_watched = rs.getInt("ep_watched");			
+				
+				UserShow foundShow = new UserShow(usershow_id, user_id, show_id, status, indiv_rating, ep_watched);
+				
+				allStatusList.add(foundShow);
+				
+			}
+		} catch (SQLException e) {
+
+		}
+		
+		allStatus = Optional.of(allStatusList);
+		return allStatus;
+		
+	}
+	
 }
