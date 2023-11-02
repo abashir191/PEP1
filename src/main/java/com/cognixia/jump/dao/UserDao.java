@@ -13,9 +13,9 @@ public interface UserDao {
 	boolean logIn(User user);
 	
     // User operations
-    User getUserById(int userId);
+    Optional<User> getUserById(int userId);
     List<User> getAllUsers();
-    User addUser(User user);
+    boolean addUser(User user);
 
     // TVShow operations
     TVShow getTVShowById(int showId);
@@ -23,6 +23,8 @@ public interface UserDao {
     TVShow addTVShow(TVShow tvShow);
     TVShow updateTVShow(TVShow tvShow);
     boolean deleteTVShow(int showId);
+    List<TVShow> getShowByName(String name);
+    
     // TVShow searchTVShow(String string);
     
     // UserShow operations
