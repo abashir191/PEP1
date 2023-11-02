@@ -119,10 +119,10 @@ public class Menu {
 			// int input = sc.nextInt();
 			// sc.nextLine();
 	
-			System.out.println("What do you rate the show? (1-5)\n");
+			System.out.println("What do you rate the show? (1-5)");
 			double ratinginput = sc.nextDouble();
 			
-			System.out.println("How many episodes are there? \n");
+			System.out.println("How many episodes are there?");
 			int maxep = sc.nextInt();
 			
 			TVShow newShow = new TVShow(0, showInput, ratinginput, maxep);
@@ -186,15 +186,15 @@ public class Menu {
 		
 		System.out.println("Please enter the name of the TV show you wish to see the average rating for: ");
 		String show = sc.nextLine();
-		List<TVShow> showByName = udi.getShowByName(show);
+		List<UserShow> showByName = udi.getShowByName(show);
 		
 		int counter = 0;
 		double total = 0;
 		
-		for (TVShow eachShow: showByName) {
+		for (UserShow eachShow: showByName) {
 			
 			counter++;
-			total += eachShow.getRating();
+			total += eachShow.getIndiv_rating();
 			
 		}
 		

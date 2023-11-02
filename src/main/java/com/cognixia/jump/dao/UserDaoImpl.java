@@ -184,7 +184,7 @@ public class UserDaoImpl implements UserDao {
 		try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 			preparedStatement.setString(1, tvShow.getShow_name());
 			preparedStatement.setDouble(2, tvShow.getRating());
-			preparedStatement.setInt(2, tvShow.getMax_episode());
+			preparedStatement.setInt(3, tvShow.getMax_episode());
 			int affectedRows = preparedStatement.executeUpdate();
 			if (affectedRows == 1) {
 				try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
@@ -293,23 +293,25 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 	@Override
-	public List<TVShow> getShowByName(String name) throws NullPointerException {
+	public List<UserShow> getShowByName(String name) throws NullPointerException {
 		
-		List<TVShow> showByName = new ArrayList<>();
+		List<UserShow> showByName = new ArrayList<>();
 		
-		try ( PreparedStatement pstmt = connection.prepareStatement("select * from TVShow where show_name = ?")) {
+		try ( PreparedStatement pstmt = connection.prepareStatement("select * from UserShow where show_id = ?")) {
 			
 			pstmt.setString(1, name);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
 				
-				int show_id = rs.getInt("show_id");
-				String show_name = rs.getString("show_name");
-				double rating = rs.getDouble("rating");
-				int max_episode = rs.getInt("max_episode");
+				int show_id = rs.getInt("usershow_id");
+				int uid = rs.getInt("user");
+				int sid = rs.getInt("show");
+				String status = rs.getString("status");
+				double rating = rs.getDouble("indiv_rating");
+				int ep_watched = rs.getInt("ep_watched");
 				
-				TVShow foundShow = new TVShow(show_id, show_name, rating, max_episode);
+				UserShow foundShow = new UserShow(show_id, uid, sid, status, rating, ep_watched);
 				showByName.add(foundShow);
 				
 			}
