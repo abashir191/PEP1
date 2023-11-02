@@ -109,79 +109,96 @@ public class Menu {
 		}
 	}
 
+	//Could have created new class file, decided to just do it here
+	public class ImproperPermissionException extends Exception {
+		public ImproperPermissionException(String errorMessage) {
+			super(errorMessage);
+		}
+	}
 	public void createTVShow() {
-		if (liUserId == 1) {
-			System.out.println("Please enter the name of the TV show you would like to add: ");
-			String showInput = sc.nextLine();
-			//logic for finding if the show exists here, exit if it does not exist
-	
-	
-			// System.out.println("What is your current watch status of this show?\n"
-			//		+ "1. Not watched\n"
-			//		+ "2. Currently watching\n"
-			//		+ "3. Finished");
-			// int input = sc.nextInt();
-			// sc.nextLine();
-	
-			System.out.println("What do you rate the show? (1-5)");
-			double ratinginput = sc.nextDouble();
-			
-			System.out.println("How many episodes are there?");
-			int maxep = sc.nextInt();
-			
-			TVShow newShow = new TVShow(0, showInput, ratinginput, maxep);
-			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-			if (udi.addTVShow(newShow) != null) {
-				System.out.println("Show successfully created.");
+		try {
+			if (liUserId == 1) {
+				System.out.println("Please enter the name of the TV show you would like to add: ");
+				String showInput = sc.nextLine();
+				//logic for finding if the show exists here, exit if it does not exist
+
+
+				// System.out.println("What is your current watch status of this show?\n"
+				//		+ "1. Not watched\n"
+				//		+ "2. Currently watching\n"
+				//		+ "3. Finished");
+				// int input = sc.nextInt();
+				// sc.nextLine();
+
+				System.out.println("What do you rate the show? (1-5)");
+				double ratinginput = sc.nextDouble();
+
+				System.out.println("How many episodes are there?");
+				int maxep = sc.nextInt();
+
+				TVShow newShow = new TVShow(0, showInput, ratinginput, maxep);
+				System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
+				if (udi.addTVShow(newShow) != null) {
+					System.out.println("Show successfully created.");
+				} else {
+					System.out.println("Show NOT successfully created.");
+				}
+				System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 			} else {
-				System.out.println("Show NOT successfully created.");
+				throw new ImproperPermissionException("You do not have the necessary permissions to create a TV show.");
 			}
+		} catch (ImproperPermissionException e) {
 			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-		} else {
-			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-			System.out.println("You do not have admin privilege to create a TV show.");
+			System.out.println("Error: " + e.getMessage());
 			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 		}
 	}
 
 	public void modifyTVShow() {
-		if (liUserId == 1) {
-			System.out.println("Please enter the ID of the TV show whose rating you would like to modify: ");
-			int showInput = sc.nextInt();
-			//logic for finding if the show exists here, exit if it does not exist
-			System.out.println("What is the updated rating for the show? (1-5)");
-			int input = sc.nextInt();
-			sc.nextLine();
-			TVShow oldShow = udi.getTVShowById(showInput);
-			TVShow updatedShow = new TVShow(showInput, oldShow.getShow_name(), input, oldShow.getMax_episode());
-			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-			if (udi.updateTVShow(updatedShow)!= null) {
-				System.out.println("Show successfully updated.");
+		try {
+			if (liUserId == 1) {
+				System.out.println("Please enter the ID of the TV show whose rating you would like to modify: ");
+				int showInput = sc.nextInt();
+				//logic for finding if the show exists here, exit if it does not exist
+				System.out.println("What is the updated rating for the show? (1-5)");
+				int input = sc.nextInt();
+				sc.nextLine();
+				TVShow oldShow = udi.getTVShowById(showInput);
+				TVShow updatedShow = new TVShow(showInput, oldShow.getShow_name(), input, oldShow.getMax_episode());
+				System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
+				if (udi.updateTVShow(updatedShow)!= null) {
+					System.out.println("Show successfully updated.");
+				} else {
+					System.out.println("Show NOT successfully updated. Please make sure show with the given ID exists.");
+				}
+				System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 			} else {
-				System.out.println("Show NOT successfully updated. Please make sure show with the given ID exists.");
+				throw new ImproperPermissionException("You do not have the necessary permissions to modify a TV show.");
 			}
+		} catch (ImproperPermissionException e) {
 			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-		} else {
-			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-			System.out.println("You do not have admin privilege to modify a TV show.");
+			System.out.println("Error: " + e.getMessage());
 			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 		}
 	}
-
 	public void deleteTVShow() {
-		if (liUserId == 1) {
-			System.out.println("Please enter the ID of the TV show you wish to delete: ");
-			int input = sc.nextInt();
-			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-			if (udi.deleteTVShow(input)) {
-				System.out.println("Show successfully deleted.");
+		try {
+			if (liUserId == 1) {
+				System.out.println("Please enter the ID of the TV show you wish to delete: ");
+				int input = sc.nextInt();
+				System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
+				if (udi.deleteTVShow(input)) {
+					System.out.println("Show successfully deleted.");
+				} else {
+					System.out.println("Show NOT successfully deleted.");
+				}
+				System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 			} else {
-				System.out.println("Show NOT successfully deleted.");
+				throw new ImproperPermissionException("You do not have the necessary permissions to delete a TV show.");
 			}
+		} catch (ImproperPermissionException e) {
 			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-		} else {
-			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-			System.out.println("You do not have admin privilege to delete a TV show.");
+			System.out.println("Error: " + e.getMessage());
 			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 		}
 	}
@@ -237,6 +254,12 @@ public class Menu {
 		System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 	}
 
+	public class InvalidPasswordException extends Exception {
+		public InvalidPasswordException(String errorMessage) {
+			super(errorMessage);
+		}
+	}
+
 	public boolean loginMenu() {
 		System.out.println(ANSI_YELLOW + "Welcome! Please select an option from below: \n"
 				+ "1. Existing user log in\n"
@@ -281,13 +304,22 @@ public class Menu {
 			username = sc.nextLine();
 			System.out.println("Please enter your password: ");
 			password = sc.nextLine();
-			User createdusr = new User(0, username, password, "normal");
-			//query to add username and password to table here
-			if (udi.addUser(createdusr)) {
+
+			try {
+				if (!isValidPassword(password)) {
+					throw new InvalidPasswordException("Invalid password. Please make sure it has: \n-at least 5 characters \n-at least one capital letter \n-at least one number \n-no special characters");
+				}
+
+				User createdUsr = new User(0, username, password, "normal");
+				//query to add username and password to table here
+				if (udi.addUser(createdUsr)) {
+					System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
+					System.out.println("Account successfully created, username= " + username + ".");
+				}
 				System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
-				System.out.println("Account successfully created, username= " + username + ".");
+			} catch (InvalidPasswordException e) {
+				System.out.println("Error: " + e.getMessage());
 			}
-			System.out.println(ANSI_GREEN + "--------------------" + ANSI_RESET);
 			return false;
 
 		case 3:
@@ -296,6 +328,22 @@ public class Menu {
 			System.out.println("Invalid input, please try again.");
 		}
 		return false;
+	}
+
+	private boolean isValidPassword(String password) {
+		if (password.length() < 5) {
+			return false;
+		}
+		if (!password.matches(".*[A-Z].*")) {
+			return false;
+		}
+		if (!password.matches(".*\\d.*")) {
+			return false;
+		}
+		if (password.matches(".*[^a-zA-Z0-9].*")) {
+			return false;
+		}
+		return true;
 	}
 	
 	public void viewYourShows() {
