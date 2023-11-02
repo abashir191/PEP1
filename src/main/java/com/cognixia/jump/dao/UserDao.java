@@ -10,7 +10,7 @@ public interface UserDao {
 	public void closeConnection() throws SQLException ;
 	
 	// Login
-	boolean logIn(User user);
+	int logIn(User user);
 	
     // User operations
     Optional<User> getUserById(int userId);
@@ -30,5 +30,8 @@ public interface UserDao {
     // UserShow operations
     Optional<List<UserShow>> getAllUserShows(int id);
     boolean updateUserShow(UserShow userShow);
+    boolean addUserShow(UserShow userShow);
+    boolean deleteUserShow(int usid, int usrid);
+    Optional<UserShow> getUserShowByID(int usid, int usrid);
     
 }

@@ -10,7 +10,7 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
 
 	private Connection connection = null;
-
+	
 	@Override
 	public void establishConnection() throws ClassNotFoundException, SQLException {
 		
@@ -24,7 +24,7 @@ public class UserDaoImpl implements UserDao {
 		connection.close();
 	}
 	@Override
-	public boolean logIn(User user) {
+	public int logIn(User user) {
 		try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM User WHERE username = ? AND password = ?")) {
 			ps.setString(1, user.getUsername());
 			ps.setString(2, user.getPassword());
@@ -33,19 +33,20 @@ public class UserDaoImpl implements UserDao {
 
 			// Check if the user with the provided username and password exists
 			if (rs.next()) {
+				int user_Id = rs.getInt("user_id");
 				rs.close();
-				return true; // Return true if the user can log in
+				return user_Id; // Return true if the user can log in
 			} else {
 				rs.close();
-				return false; // Return false if the user cannot log in
+				return 0; // Return false if the user cannot log in
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return false; // Return false if an SQL exception occurs during the login attempt
+			return 0; // Return false if an SQL exception occurs during the login attempt
 		} catch (NullPointerException e) {
 			System.out.println("still nullpointer");
-			return false;			
+			return 0;			
 		}
 	}
 
@@ -149,7 +150,8 @@ public class UserDaoImpl implements UserDao {
 					int show_id = resultSet.getInt("show_id");
 					String show_name = resultSet.getString("show_name");
 					double rating = resultSet.getDouble("rating");
-					return new TVShow(show_id, show_name, rating);
+					int max_episode = resultSet.getInt("max_episode");
+					return new TVShow(show_id, show_name, rating, max_episode);
 				}
 			}
 		} catch (SQLException e) {
@@ -167,7 +169,8 @@ public class UserDaoImpl implements UserDao {
 				int show_id = resultSet.getInt("show_id");
 				String show_name = resultSet.getString("show_name");
 				double rating = resultSet.getDouble("rating");
-				TVShow tvShow = new TVShow(show_id, show_name, rating);
+				int max_episode = resultSet.getInt("max_episode");
+				TVShow tvShow = new TVShow(show_id, show_name, rating, max_episode);
 				tvShows.add(tvShow);
 			}
 		} catch (SQLException e) {
@@ -177,10 +180,11 @@ public class UserDaoImpl implements UserDao {
 	}
 	@Override
 	public TVShow addTVShow(TVShow tvShow) {
-		String query = "INSERT INTO TVShow (show_name, rating) VALUES (?, ?)";
+		String query = "INSERT INTO TVShow (show_name, rating, max_episode) VALUES (?, ?, ?)";
 		try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 			preparedStatement.setString(1, tvShow.getShow_name());
 			preparedStatement.setDouble(2, tvShow.getRating());
+			preparedStatement.setInt(2, tvShow.getMax_episode());
 			int affectedRows = preparedStatement.executeUpdate();
 			if (affectedRows == 1) {
 				try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
@@ -244,8 +248,10 @@ public class UserDaoImpl implements UserDao {
 				int user_id = rs.getInt("user_id");
 				int show_id = rs.getInt("show_id");
 				String status = rs.getString("status");
+				double indiv_rating = rs.getDouble("indiv_rating");
+				int ep_watched = rs.getInt("ep_watched");			
 				
-				UserShow foundShow = new UserShow(usershow_id, user_id, show_id, status);
+				UserShow foundShow = new UserShow(usershow_id, user_id, show_id, status, indiv_rating, ep_watched);
 				
 				userShowList.add(foundShow);
 			}
@@ -263,12 +269,14 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public boolean updateUserShow(UserShow userShow) {
 		
-		try( PreparedStatement pstmt = connection.prepareStatement("insert into UserShow(user_id, show_id, status) values(?, ?, ?) where user_id = ?") ) {
+		String query = "UPDATE UserShow SET indiv_rating = ?, status = ?, ep_watched = ? WHERE usershow_id = ? and user_id = ?";
+		try( PreparedStatement pstmt = connection.prepareStatement(query) ) {
 			
-			pstmt.setInt(1, userShow.getUser_id());
-			pstmt.setInt(2, userShow.getShow_id());
-			pstmt.setString(3, userShow.getStatus());
+			pstmt.setDouble(1, userShow.getIndiv_rating());
+			pstmt.setString(2, userShow.getStatus());
+			pstmt.setInt(3, userShow.getEp_watched());
 			pstmt.setInt(4, userShow.getUsershow_id());
+			pstmt.setInt(5, userShow.getUser_id());
 			
 			int count = pstmt.executeUpdate();
 			
@@ -299,8 +307,9 @@ public class UserDaoImpl implements UserDao {
 				int show_id = rs.getInt("show_id");
 				String show_name = rs.getString("show_name");
 				double rating = rs.getDouble("rating");
+				int max_episode = rs.getInt("max_episode");
 				
-				TVShow foundShow = new TVShow(show_id, show_name, rating);
+				TVShow foundShow = new TVShow(show_id, show_name, rating, max_episode);
 				showByName.add(foundShow);
 				
 			}
@@ -311,6 +320,89 @@ public class UserDaoImpl implements UserDao {
 		
 		return showByName;
 		
+	}
+	
+	@Override
+	public boolean addUserShow(UserShow userShow) {
+		
+		try ( PreparedStatement pstmt = connection.prepareStatement("select * from UserShow where user_id = ? and show_id = ?") ) {
+			pstmt.setInt(1, userShow.getUser_id());
+			pstmt.setInt(2, userShow.getShow_id());
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				return false;
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		String query = "INSERT INTO UserShow (user_id, show_id, status, indiv_rating, ep_watched) VALUES (?, ?, ?, ?, ?)";
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+			preparedStatement.setInt(1, userShow.getUser_id());
+			preparedStatement.setInt(2, userShow.getShow_id());
+			preparedStatement.setString(3, userShow.getStatus());
+			preparedStatement.setDouble(4, userShow.getIndiv_rating());
+			preparedStatement.setInt(5, userShow.getEp_watched());
+			
+			int affectedRows = preparedStatement.executeUpdate();
+			if (affectedRows == 1) {
+				try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						int show_id = generatedKeys.getInt(1);
+						userShow.setShow_id(show_id);
+						return true;
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+		
+	}
+	
+	@Override
+	public boolean deleteUserShow(int usid, int usrid) {
+		String query = "DELETE FROM UserShow WHERE usershow_id = ? and user_id = ?";
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setInt(1, usid);
+			preparedStatement.setInt(2, usrid);
+			int affectedRows = preparedStatement.executeUpdate();
+			return affectedRows == 1;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public Optional<UserShow> getUserShowByID(int usid, int usrid) {
+		
+		Optional<UserShow> userShowOpt = Optional.empty();
+		
+		try (PreparedStatement preparedStatement = connection.prepareStatement("select * from UserShow where usershow_id = ?")) {
+			preparedStatement.setInt(1, usid);
+			ResultSet rs = preparedStatement.executeQuery();
+			while (rs.next()) {
+				
+				int usershow_id = rs.getInt("usershow_id");
+				int user_id = rs.getInt("user_id");
+				int show_id = rs.getInt("show_id");
+				String status = rs.getString("status");
+				double indiv_rating = rs.getDouble("indiv_rating");
+				int ep_watched = rs.getInt("ep_watched");			
+				
+				UserShow foundShow = new UserShow(usershow_id, user_id, show_id, status, indiv_rating, ep_watched);
+				
+				userShowOpt = Optional.of(foundShow);
+				
+				return userShowOpt;
+				
+			}
+		} catch (SQLException e) {
+
+		}
+		
+		return userShowOpt;
 	}
 	
 }
